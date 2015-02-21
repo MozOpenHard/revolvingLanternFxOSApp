@@ -1,0 +1,22 @@
+{
+  "name": "revolving lantern",
+  "type": "certified",
+  "description": "...",
+  "launch_path": "/index.html",
+  "developer": {
+    "name": "KDDI R&D",
+    "url": "http://kddilabs.jp"
+  },
+  "permissions": {
+    "systemXHR":{}
+  },
+  "icons": {
+    "128": "/style/icon/gpio.png"
+  },
+  "connections":{
+    "comms":{
+      "description": "revolving lantern",
+      "rules": {}
+    }
+  }
+}

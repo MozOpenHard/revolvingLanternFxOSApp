@@ -15,7 +15,7 @@
   var ctx;
   var cx;
   var cy;
-
+  
 
   window.onload = function(){
     init();
@@ -49,6 +49,8 @@
       img2.src = imagesFile[1];
     };
     img1.src = imagesFile[0];
+    
+    checkRotation();
 
   }
 
@@ -257,7 +259,65 @@
         autoCount++;
 
       }while(1) 
-   }
+  }
 
+
+  var currentRotation=0;
+  function checkRotation(){
+    console.log("checkRotation");
+    
+    var url = "http://lantern.local:3001/checkRotation/";
+    send(url);
+    
+  }
+  function checkCommand(res){
+    console.log(res);
+    var pastRotation = currentRotation;
+    var response = JSON.parse(res);
+    response = response.res;
+    //response = response.res.split("\")[0];
+    console.log("checkCommand");
+    console.log(response);
+    currentRotation = parseInt(response);
+    
+    var rotation = currentRotation - pastRotation;
+    console.log(rotation);
+    if(rotation > 30000){
+      rotation = rotation - 65536;
+    }else if(rotation < -30000){
+      rotation = rotation + 65536;
+    }
+    var cmd;
+    var count;
+    if(rotation > 0){
+      cmd = "right";
+      count = rotation / 100;
+    }else{
+      cmd = "left";
+      count = Math.abs(rotation) / 100;
+    }
+    for(var i=0;i<count;i++){
+      console.log("keypress" + cmd);
+      keyPress(cmd);
+      render();
+    }
+    
+    Timer = setTimeout(function(){
+      checkRotation();
+    },50);
+  }
+  
+  function send(url){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = function(){
+      // 本番用
+      if (xhr.readyState === 4 && xhr.status === 200){
+        console.log(xhr.responseText);
+        checkCommand(xhr.responseText);
+      }
+    };
+    xhr.send(null);
+  }
 
 })();

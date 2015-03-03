@@ -8,7 +8,9 @@
     "url": "http://kddilabs.jp"
   },
   "permissions": {
-    "systemXHR":{}
+    "systemXHR" : {
+      "description" : "Required to access remote api"
+    }
   },
   "icons": {
     "128": "/style/icon/gpio.png"

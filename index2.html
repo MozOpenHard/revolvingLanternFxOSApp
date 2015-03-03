@@ -2,16 +2,14 @@
 <html>
   <head>
     <meta charset=""UTF-8"" />
-    <script type="text/javascript" src="js/playdata.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
-    <script type="text/javascript" src="js/tetris.js"></script>
+    <script type="text/javascript" src="js/pattern.js"></script>
     <style>
       html,body{
         width: 100%;
         height: 100%;
         margin: 0;
         padding: 0;
-        background-color: #000000;
+        background-color: #dddddd;
         position: absolute;
         overflow: hidden;
       }
@@ -25,26 +23,46 @@
         height: 1000px;
         margin: auto;
         -webkit-transform: perspective(300) rotateX(-0deg);
-        -Moz-transform: perspective(300) rotateX(-1.6deg);
-        
+        -moz-transform: perspective(300) rotateX(-0deg);
+        border: solid #ff0000; 
       }
       #canvas_rotate{
         width: 1000px;
         height: 1000px;
       }
-      #canvas{
+      #canvas1{
+        position: absolute;
         margin: auto;
+        //visibility: hidden;
+      }
+      #canvas2{
+        position: absolute;
+        margin: auto;
+        //visibility: hidden;
+      }
+      #canvas3{
+        position: absolute;
+        margin: auto;
+        //visibility: hidden;
+      }
+      #canvas4{
+        position: absolute;
+        margin: auto;
+        //visibility: hidden;
       }
       #origin{
         position: absolute;
-        visibility: hidden;
+        visibility: visible;
       }
     </style>
   </head>
   <body>
     <div id="canvas_pers">
       <div id="canvas_rotate">
-        <canvas id="canvas"></canvas>
+        <canvas id="canvas1"></canvas>
+        <canvas id="canvas2"></canvas>
+        <canvas id="canvas3"></canvas>
+        <canvas id="canvas4"></canvas>
       </div>
     </div>
     <canvas id="origin"></canvas>

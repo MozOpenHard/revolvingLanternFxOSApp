@@ -18,7 +18,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 */
 
 
-var COLS = 20, ROWS = 10;  // 盤面のマスの数
+
 var board = [];  // 盤面の状態を保持する変数
 var lose;  // 一番うえまで積み重なっちゃったフラグ
 var interval;  // ゲームタイマー保持用変数
@@ -26,15 +26,16 @@ var current; // 現在操作しているブロック
 var currentX, currentY; // 現在操作しているブロックのいち
 
 // ブロックのパターン
+
 var shapes = [
-  [ 1, 1, 1, 1 ],
+  [ 1, 1, 1 ],
   [ 1, 1, 0, 0,
     1, 1 ],
   [ 1, 0, 0, 0,
     1, 0, 0, 0,
-    1, 0, 0, 0,
-    1, 0 ,0, 0 ]
+    1, 0, 0, 0 ]
 ];
+
 // ブロックの色
 var colors = [
   'cyan', 'pink', 'azure','orange', 'blue', 'yellow', 'red', 'green', 'purple'
@@ -45,7 +46,7 @@ var img1 = new Image();
 var img2 = new Image();
 var img3 = new Image();
 var images =[img1,img2,img3];
-var imagesFile =["images/texture.png","images/wa1.jpg","images/wa2.jpg"];
+var imagesFile =["images/texture.png","images/texture.png","images/texture.png"];
 
 
 //レコーディング関連変数群
@@ -82,7 +83,12 @@ function newShape() {
     }
   }
   // 新しいブロックの盤面上における初期配置座標
-  currentX = 5;
+  console.log("Rotate"+Rotate);
+  //currentX = 0;
+  if(!currentX){
+    currentX=5;
+  }
+  rotation(currentX);
   currentY = 0;
 }
 
@@ -100,6 +106,7 @@ function init() {
 // 操作ブロックを下の方へ動かし、
 // 操作ブロックが着地したら消去処理、ゲームオーバー判定を行う
 function tick() {
+  //console.log("tick");
   // １つ下へ移動する
   if ( valid( 0, 1 ) ) {
     ++currentY;
@@ -117,13 +124,32 @@ function tick() {
       var dumyObj ={"record":recordSet};
       console.log(JSON.stringify(dumyObj));
 
-
+      /*
+      startAutoDraw();
+      _bAutoMode = true;
+      */
+      //sendAutomode(ORIGIN + "auto/");
       newGame();
       return false;
     }
     // 新しい操作ブロックをセットする
     newShape();
   }
+}
+
+function sendAutomode(url){
+  console.log("send"+url);
+  var xhr = new XMLHttpRequest({mozSystem: true});
+  console.log(xhr);
+  xhr.open('GET', url, true);
+  xhr.onreadystatechange = function(){
+    console.log("onreadychange" + xhr.readyState + ";" + xhr.status);
+    // 本番用
+    if (xhr.readyState === 4 && xhr.status === 200){
+      console.log(xhr.responseText);
+    }
+  };
+  xhr.send(null);
 }
 
 // 操作ブロックを盤面にセットする関数
@@ -209,7 +235,7 @@ function valid( offsetX, offsetY, newCurrent ) {
         if ( typeof board[ y + offsetY ] == 'undefined'
            || typeof board[ y + offsetY ][ (x + offsetX)%COLS ] == 'undefined'
            || board[ y + offsetY ][ (x + offsetX)%COLS ]
-           || y + offsetY >= ROWS-1) {
+           || y + offsetY >= ROWS-BOTTOM) {
              if (offsetY == 1 && offsetY-currentY == 1){
                console.log('game over');
                lose = true; // もし操作ブロックが盤面の上にあったらゲームオーバーにする             
@@ -225,6 +251,7 @@ function valid( offsetX, offsetY, newCurrent ) {
 
 /*ゲーム開始関数*/
 function newGame() {
+  console.log("new game");
   clearInterval(interval);  // ゲームタイマーをクリア
   init();  // 盤面をまっさらにする
   newShape();  // 新しい
@@ -240,6 +267,7 @@ function keyPress( key ) {
     case 'left':
       if ( valid( -1 ) ) {
         --currentX;  // 左に一つずらす
+        rotation(currentX);
       }
       break;
 
@@ -247,6 +275,7 @@ function keyPress( key ) {
       if ( valid( 1 ) ) {
         ++currentX;  // 右に一つずらす
         currentX%=COLS;
+        rotation(currentX);
       }
       break;
     case 'down':
